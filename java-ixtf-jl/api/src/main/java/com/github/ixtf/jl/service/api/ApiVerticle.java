@@ -92,8 +92,9 @@ public class ApiVerticle extends AbstractVerticle {
         final var address = apiAddress(rc);
         final var spanOpt = spanOpt(rc, address);
         final var deliveryOptions = deliveryOptions(rc, spanOpt);
-        final var principal = rc.user().attributes().getString("sub");
-        deliveryOptions.addHeader(Principal.class.getName(), principal);
+        // todo fix principal
+//        final var principal = rc.user().attributes().getString("sub");
+//        deliveryOptions.addHeader(Principal.class.getName(), principal);
         rc.response().putHeader(CONTENT_TYPE, APPLICATION_JSON);
         vertx.eventBus().request(address, rc.getBody(), deliveryOptions)
                 .onSuccess(it -> this.onSuccess(rc, it, spanOpt))
@@ -140,8 +141,9 @@ public class ApiVerticle extends AbstractVerticle {
         final var address = graphqlAddress(rc);
         final var spanOpt = spanOpt(rc, address);
         final var deliveryOptions = deliveryOptions(rc, spanOpt);
-        final var principal = rc.user().attributes().getString("sub");
-        deliveryOptions.addHeader(Principal.class.getName(), principal);
+        // todo fix principal
+//        final var principal = rc.user().attributes().getString("sub");
+//        deliveryOptions.addHeader(Principal.class.getName(), principal);
         rc.response().putHeader(CONTENT_TYPE, APPLICATION_JSON);
         vertx.eventBus().request(address, rc.getBody(), deliveryOptions)
                 .onSuccess(it -> this.onSuccess(rc, it, spanOpt))
