@@ -1,0 +1,50 @@
+plugins {
+    id "idea"
+    id "maven-publish"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE" apply false
+    id "io.freefair.lombok" version "5.3.0" apply false
+    id "com.github.johnrengelman.shadow" version "6.1.0" apply false
+    id "com.palantir.docker" version "0.26.0" apply false
+    id "com.google.protobuf" version "0.8.14" apply false
+}
+
+subprojects {
+    group "com.github.ixtf.jl"
+    version "1.0.0"
+
+    apply plugin: "idea"
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
+    apply plugin: "java"
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "io.freefair.lombok"
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2" }
+        maven { url "https://jitpack.io" }
+        maven { url "http://maven.geo-solutions.it" }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "com.github.ixtf.japp:bom:${bomVersion}"
+        }
+        dependencies {
+            dependency "io.swagger.core.v3:swagger-jaxrs2:2.1.6"
+        }
+    }
+
+    dependencies {
+        api "com.github.ixtf.japp:api-vertx",
+                "com.github.ixtf.japp:persistence-mongo"
+
+        testImplementation "io.projectreactor:reactor-tools",
+                "org.junit.jupiter:junit-jupiter-api:5.7.0"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
+    }
+}

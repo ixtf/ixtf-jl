@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  alibaba-rsocket-broker:
+    image: linuxchina/alibaba-rsocket-broker
+    ports:
+      - "9997:9997"
+      - "9998:9998"
+      - "9999:9999"

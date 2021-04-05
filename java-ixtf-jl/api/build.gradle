@@ -1,0 +1,42 @@
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+    id "com.palantir.docker"
+}
+
+dependencies {
+    implementation "ch.qos.logback:logback-classic",
+            "com.google.inject:guice",
+            "io.vertx:vertx-web-graphql",
+            "io.vertx:vertx-hazelcast",
+            "io.vertx:vertx-auth-oauth2",
+            "io.vertx:vertx-config-yaml",
+            "io.vertx:vertx-health-check",
+            "io.vertx:vertx-micrometer-metrics",
+            "io.micrometer:micrometer-registry-prometheus"
+}
+
+mainClassName = "com.github.ixtf.jl.service.api.ApiLauncher"
+jar.manifest {
+    attributes(
+            'Main-Verticle': "com.github.ixtf.jl.service.api.MainVerticle",
+            'Implementation-Title': name,
+            'Implementation-Version': version,
+            'Built-By': System.getProperty('user.name'),
+            'Built-JDK': System.getProperty('java.version'),
+            'Source-Compatibility': sourceCompatibility,
+            'Target-Compatibility': targetCompatibility
+    )
+}
+
+shadowJar {
+    mergeServiceFiles()
+    archiveName "fat.jar"
+}
+docker {
+    dependsOn shadowJar
+    name "ixtf/jl-api:${project.version}"
+    buildArgs([BUILD_VERSION: "${project.version}"])
+    files tasks.shadowJar.outputs
+    noCache true
+}

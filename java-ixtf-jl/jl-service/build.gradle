@@ -1,0 +1,37 @@
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+    id "com.palantir.docker"
+}
+
+dependencies {
+    api project(":service-idl"),
+            "com.github.ixtf.japp:codec",
+            "com.github.ixtf.japp:pinyin",
+            "io.projectreactor.rabbitmq:reactor-rabbitmq"
+}
+
+mainClassName = "com.github.ixtf.jl.service.jl.JlServiceLauncher"
+jar.manifest {
+    attributes(
+            'Main-Verticle': "com.github.ixtf.jl.service.jl.verticle.MainVerticle",
+            'Implementation-Title': name,
+            'Implementation-Version': version,
+            'Built-By': System.getProperty('user.name'),
+            'Built-JDK': System.getProperty('java.version'),
+            'Source-Compatibility': sourceCompatibility,
+            'Target-Compatibility': targetCompatibility
+    )
+}
+
+shadowJar {
+    mergeServiceFiles()
+    archiveName "fat.jar"
+}
+docker {
+    dependsOn shadowJar
+    name "ixtf/jl-service:${project.version}"
+    buildArgs([BUILD_VERSION: "${project.version}"])
+    files tasks.shadowJar.outputs
+    noCache true
+}

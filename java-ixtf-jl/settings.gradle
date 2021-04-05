@@ -1,0 +1,6 @@
+rootProject.name = 'java-ixtf-jl'
+include 'api'
+include 'service-idl'
+include 'jl-service'
+include 'report-service'
+
