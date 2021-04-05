@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public class JlServiceModule extends ApiModule {
-    public static final String SERVICE = "com.github.ixtf.jl.proto.JlService";
+    public static final String SERVICE = "xyz.ixtf.jl.proto.JlService";
 
     public JlServiceModule(Vertx vertx, JsonObject config) {
         super(vertx, SERVICE, config);

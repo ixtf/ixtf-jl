@@ -38,7 +38,7 @@ public class ApiLauncher extends Launcher {
     public void afterStartingVertx(Vertx vertx) {
         final var config = ofNullable(getenv("API_ROOT_PATH"))
                 .filter(it -> !it.isBlank())
-                .or(() -> Optional.of("/home/data/api/config.yml"))
+                .or(() -> Optional.of("/home/data/jl/config.yml"))
                 .map(File::new)
                 .filter(File::exists)
                 .filter(File::canRead)
@@ -51,8 +51,7 @@ public class ApiLauncher extends Launcher {
 
     @SneakyThrows(IOException.class)
     private JsonNode readYaml(File file) {
-        final var mapper = new YAMLMapper();
-        return mapper.readTree(file);
+        return new YAMLMapper().readTree(file);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class JlServiceLauncher extends Launcher {
     @Override
     public void afterStartingVertx(Vertx vertx) {
         super.afterStartingVertx(vertx);
-        final var config = config("ALG_CHECK_ROOT_PATH", "/home/data/alg-check/config.yml");
+        final var config = config("JL_ROOT_PATH", "/home/data/jl/config.yml");
         init(new JlServiceModule(vertx, config), new MongoModule(), new RabbitMQModule());
     }
 
