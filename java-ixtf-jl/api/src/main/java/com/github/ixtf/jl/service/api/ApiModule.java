@@ -98,4 +98,17 @@ public class ApiModule extends AbstractModule {
         return CorsHandler.create(allowedOriginPattern).allowedHeaders(allowedHeaders).allowCredentials(true);
     }
 
+    @Singleton
+    @Provides
+    private Tracer Tracer() {
+        return ofNullable(config.getJsonObject("tracer")).map(it -> {
+            final var serviceName = it.getString("serviceName", "jl");
+            final var agentHost = it.getString("agentHost");
+            final var samplerConfig = Configuration.SamplerConfiguration.fromEnv().withType("const").withParam(1);
+            final var senderConfiguration = new Configuration.SenderConfiguration().withAgentHost(agentHost);
+            final var reporterConfig = Configuration.ReporterConfiguration.fromEnv().withSender(senderConfiguration).withLogSpans(true);
+            return new Configuration(serviceName).withSampler(samplerConfig).withReporter(reporterConfig).getTracer();
+        }).orElse(null);
+    }
+
 }
